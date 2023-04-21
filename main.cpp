@@ -281,6 +281,10 @@ class ReverseOrStraight_Notation{
             flagCreation = false;
         }
     }
+    ReverseOrStraight_Notation(std :: string str, int key){
+        ReverseOrStraight_flag = key;
+        result = str;
+    }
     void calculation(Stack_str sta){
         if(!result.empty()){
             if(ReverseOrStraight_flag == -1) reversingString(result);
@@ -326,27 +330,51 @@ int main() {
     bool flagRepeat = true;
     std :: cout << std :: fixed;
     std :: cout.precision(2);
+    char key;
     while(flagRepeat){
+        std :: cout << "\t~~What orm will the expression take~~\n1) Common expression\n2) Straight notation\n3) Reverse notation\n0) Exit\n";
+        std :: cin >> key;
+        std :: cin.clear();
+        while(std :: cin.get() != '\n');
         std :: cout << "\t~~Enter a mathematical expression~~\n";
         getline(std :: cin, str);
-        std :: cout << "\t~~Which notation do you want to build~~\n1) Straight\n2) Reverse\n0) Exit\n";
-        char key;
-        std :: cin >> key;
         switch (key) {
-            case'1':{
-                ReverseOrStraight_Notation str_notation(str,new_stack,key_str);
-                reversingString(str_notation.result);
-                str_notation.output();
+            case '1':{
+                std :: cout << "\t~~Which notation do you want to build~~\n1) Straight\n2) Reverse\n";
                 std :: cin.clear();
                 while(std :: cin.get() != '\n');
+                std :: cin >> key;
+                switch (key) {
+                    case'1':{
+                        ReverseOrStraight_Notation str_notation(str,new_stack,key_str);
+                        reversingString(str_notation.result);
+                        str_notation.output();
+                        std :: cin.clear();
+                        while(std :: cin.get() != '\n');
+                        str_notation.calculation(str_stack);
+                        break;
+                    }
+                    case'2':{
+                        ReverseOrStraight_Notation rev_notation(str,new_stack,key_rev);
+                        rev_notation.output();
+                        std :: cin.clear();
+                        while(std :: cin.get() != '\n');
+                        rev_notation.calculation(str_stack);
+                        break;
+                    }
+                    default :{
+                        std :: cout <<"error";
+                    }
+                }
+                break;
+            }
+            case '2':{
+                ReverseOrStraight_Notation str_notation(str,key_str);
                 str_notation.calculation(str_stack);
                 break;
             }
-            case'2':{
-                ReverseOrStraight_Notation rev_notation(str,new_stack,key_rev);
-                rev_notation.output();
-                std :: cin.clear();
-                while(std :: cin.get() != '\n');
+            case '3':{
+                ReverseOrStraight_Notation rev_notation(str,key_rev);
                 rev_notation.calculation(str_stack);
                 break;
             }
@@ -354,8 +382,8 @@ int main() {
                 flagRepeat = false;
                 break;
             }
-            default :{
-                std :: cout <<"error";
+            default:{
+                std :: cout << "error\n";
             }
         }
     }
