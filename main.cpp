@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <Windows.h>
+HANDLE hConsole;
 struct List_ch {
     char data;
     List_ch *tail;
@@ -35,7 +37,11 @@ public :
         delete *buff;
         delete buff;
     }
-    else std :: cout <<"Stack is empty"<<'\n';
+    else {
+        SetConsoleTextAttribute(hConsole, 12);
+        std :: cout <<"Stack is empty"<<'\n';
+        SetConsoleTextAttribute(hConsole, 10);
+    }
     }
     void stackOut(){
     if(!empty()){
@@ -47,7 +53,11 @@ public :
         }
         std :: cout << "\n      head^\n\n";
     }
-    else std :: cout <<"~~Stack is empty~~"<<'\n';
+    else {
+        SetConsoleTextAttribute(hConsole, 12);
+        std :: cout <<"~~Stack is empty~~"<<'\n';
+        SetConsoleTextAttribute(hConsole, 10);
+    }
 }
     List_ch * GetCurr(){
         return curr;
@@ -82,7 +92,11 @@ public :
             delete buff;
             return buff_str;
         }
-        else std :: cout <<"Stack is empty"<<'\n';
+        else {
+            SetConsoleTextAttribute(hConsole, 12);
+            std :: cout <<"Stack is empty"<<'\n';
+            SetConsoleTextAttribute(hConsole, 10);
+        }
     }
     void stackOut(){
         if(!empty()){
@@ -94,7 +108,12 @@ public :
             }
             std :: cout << "\n      head^\n\n";
         }
-        else std :: cout <<"~~Stack is empty~~"<<'\n';
+        else{
+            SetConsoleTextAttribute(hConsole, 12);
+            std :: cout <<"~~Stack is empty~~"<<'\n';
+            SetConsoleTextAttribute(hConsole, 10);
+
+        }
     }
     bool pairCheck(){
     if(!empty()){
@@ -284,9 +303,15 @@ class ReverseOrStraight_Notation{
         ReverseOrStraight_flag = key;
         if(checkString(str)){
             initialization(str);
-            if(ReverseOrStraight_flag == 1) std :: cout << "-----String : " << str << '\n';
+            if(ReverseOrStraight_flag == 1) {
+                SetConsoleTextAttribute(hConsole, 13);
+                std :: cout << "----------String : " << str << '\n';
+                SetConsoleTextAttribute(hConsole, 10);
+            }
             else{
+                SetConsoleTextAttribute(hConsole, 13);
                 std :: cout << "-----String : " << str << '\n';
+                SetConsoleTextAttribute(hConsole, 10);
                 reversingString(str);
             }
             processing(str, result,sta);
@@ -318,13 +343,16 @@ class ReverseOrStraight_Notation{
                             }
                         }while(checkPriority(result[i]) == 0 && i < result.length());
                         i--;
+                        if(ReverseOrStraight_flag == -1) reversingString(buffStr);
                         if(!buffStr.empty())sta.itemPush(buffStr);
                         break;
                     }
                     case 2: case 3:{
                         if(sta.pairCheck())checkChar(result[i], sta);
                         else{
+                            SetConsoleTextAttribute(hConsole, 12);
                             std :: cout <<"Invalid input\n";
+                            SetConsoleTextAttribute(hConsole, 10);
                             InvalidInput = false;
                             sta.stackDelete();
                         }
@@ -333,18 +361,28 @@ class ReverseOrStraight_Notation{
                 }
                 sta.stackOut();
             }
-            if(!sta.pairCheck() && !sta.empty())std :: cout << "~~Result : " << std :: stod(sta.itemOut())<< " ~~\n";
+            if(!sta.pairCheck() && !sta.empty()){
+                SetConsoleTextAttribute(hConsole, 13);
+                std :: cout << "----------Result : " << std :: stod(sta.itemOut())<< " ~~\n";
+                SetConsoleTextAttribute(hConsole, 10);
+            }
         }
     }
     void output(){
         if(flagCreation && ReverseOrStraight_flag == 1) std :: cout <<"Reverse Notation :"<< result <<'\n';
         else{
             if(flagCreation && ReverseOrStraight_flag == -1) std :: cout <<"Straight Notation :"<< result <<'\n';
-            else std :: cout <<"Invalid input\n";
+            else{
+                SetConsoleTextAttribute(hConsole, 12);
+                std :: cout <<"Invalid input\n";
+                SetConsoleTextAttribute(hConsole, 10);
+            }
         }
     }
 };
 int main() {
+    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 10);
     Stack_ch new_stack;
     Stack_str str_stack;
     short int key_str(-1), key_rev(1);
@@ -354,7 +392,9 @@ int main() {
     std :: cout.precision(2);
     char key;
     while(flagRepeat){
+        SetConsoleTextAttribute(hConsole, 14);
         std :: cout << "\t~~What form will the expression take~~\n1) Common expression\n2) Straight notation\n3) Reverse notation\n0) Exit\n";
+        SetConsoleTextAttribute(hConsole, 10);
         std :: cin >> key;
         std :: cin.clear();
         while(std :: cin.get() != '\n');
@@ -385,7 +425,9 @@ int main() {
                         break;
                     }
                     default :{
+                        SetConsoleTextAttribute(hConsole, 12);
                         std :: cout <<"error";
+                        SetConsoleTextAttribute(hConsole, 10);
                     }
                 }
                 break;
@@ -405,7 +447,9 @@ int main() {
                 break;
             }
             default:{
+                SetConsoleTextAttribute(hConsole, 12);
                 std :: cout << "error\n";
+                SetConsoleTextAttribute(hConsole, 10);
             }
         }
     }
