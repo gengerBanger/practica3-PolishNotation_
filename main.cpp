@@ -96,6 +96,22 @@ public :
         }
         else std :: cout <<"~~Stack is empty~~"<<'\n';
     }
+    bool pairCheck(){
+    if(!empty()){
+        if(curr->tail != nullptr){
+            return true;
+        }
+        else return false;
+    }
+    else return false;
+}
+    void stackDelete(){
+        while (curr){
+            List_str * buff = curr;
+            curr = curr->tail;
+            delete buff;
+        }
+}
     List_str * GetCurr(){
         return curr;
     }
@@ -233,34 +249,34 @@ class ReverseOrStraight_Notation{
         }
     }
     void checkChar(char ch, Stack_str &sta){
-        switch (ch) {
-            case'+':
-            {
-                double i1(std:: stod(sta.itemOut())), i2(std :: stod(sta.itemOut()));
-                sta.itemPush(std ::to_string(i1 + i2));
-                break;
+            switch (ch) {
+                case'+':
+                {
+                    double i1(std:: stod(sta.itemOut())), i2(std :: stod(sta.itemOut()));
+                    sta.itemPush(std ::to_string(i1 + i2));
+                    break;
+                }
+                case'-':
+                {
+                    double i1(std:: stod(sta.itemOut())), i2(std :: stod(sta.itemOut()));
+                    if (ReverseOrStraight_flag == 1)sta.itemPush(std ::to_string(i2 - i1));
+                    else sta.itemPush(std ::to_string(i1 - i2));
+                    break;
+                }
+                case'*':
+                {
+                    double i1(std:: stod(sta.itemOut())), i2(std :: stod(sta.itemOut()));
+                    sta.itemPush(std ::to_string(i1 * i2));
+                    break;
+                }
+                case'/':
+                {
+                    double i1(std:: stod(sta.itemOut())), i2(std :: stod(sta.itemOut()));
+                    if (ReverseOrStraight_flag == 1) sta.itemPush(std ::to_string(i2 / i1));
+                    else  sta.itemPush(std ::to_string(i1 / i2));
+                    break;
+                }
             }
-            case'-':
-            {
-                double i1(std:: stod(sta.itemOut())), i2(std :: stod(sta.itemOut()));
-                if (ReverseOrStraight_flag == 1)sta.itemPush(std ::to_string(i2 - i1));
-                else sta.itemPush(std ::to_string(i1 - i2));
-                break;
-            }
-            case'*':
-            {
-                double i1(std:: stod(sta.itemOut())), i2(std :: stod(sta.itemOut()));
-                sta.itemPush(std ::to_string(i1 * i2));
-                break;
-            }
-            case'/':
-            {
-                double i1(std:: stod(sta.itemOut())), i2(std :: stod(sta.itemOut()));
-                if (ReverseOrStraight_flag == 1) sta.itemPush(std ::to_string(i2 / i1));
-                else  sta.itemPush(std ::to_string(i1 / i2));
-                break;
-            }
-        }
     }
     public :
     std :: string result;
@@ -287,9 +303,10 @@ class ReverseOrStraight_Notation{
     }
     void calculation(Stack_str sta){
         if(!result.empty()){
+            bool InvalidInput = true;
             if(ReverseOrStraight_flag == -1) reversingString(result);
             std :: string buffStr;
-            for(int i = 0; i < result.length(); i++){
+            for(int i = 0; i < result.length() && InvalidInput; i++){
                 buffStr.clear();
                 switch (checkPriority(result[i])) {
                     case 0:{
@@ -305,13 +322,18 @@ class ReverseOrStraight_Notation{
                         break;
                     }
                     case 2: case 3:{
-                        if (result[i] != ' ')checkChar(result[i], sta);
+                        if(sta.pairCheck())checkChar(result[i], sta);
+                        else{
+                            std :: cout <<"Invalid input\n";
+                            InvalidInput = false;
+                            sta.stackDelete();
+                        }
                         break;
                     }
                 }
                 sta.stackOut();
             }
-            std :: cout << "~~Result : " << std :: stod(sta.itemOut())<< " ~~\n";
+            if(!sta.pairCheck() && !sta.empty())std :: cout << "~~Result : " << std :: stod(sta.itemOut())<< " ~~\n";
         }
     }
     void output(){
@@ -332,7 +354,7 @@ int main() {
     std :: cout.precision(2);
     char key;
     while(flagRepeat){
-        std :: cout << "\t~~What orm will the expression take~~\n1) Common expression\n2) Straight notation\n3) Reverse notation\n0) Exit\n";
+        std :: cout << "\t~~What form will the expression take~~\n1) Common expression\n2) Straight notation\n3) Reverse notation\n0) Exit\n";
         std :: cin >> key;
         std :: cin.clear();
         while(std :: cin.get() != '\n');
